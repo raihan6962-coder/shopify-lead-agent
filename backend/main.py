@@ -131,7 +131,7 @@ def find_shopify_stores(keyword: str, country: str):
 # ─── SHEETS (via Apps Script) ──────────────────────────
 
 def save_lead(store: dict):
-    apps_script_url = os.environ.get("APPS_SCRIPT_URL")
+    apps_script_url = os.environ.get("https://script.google.com/macros/s/AKfycbxyPB4XQx5mX63qQMBJHjbDlk3vBChoSW06Bkp0bDT9kFHCxAQPouD2RXULWizqLXi2xw/exec")
     try:
         requests.post(
             apps_script_url,
@@ -153,7 +153,7 @@ def save_lead(store: dict):
 # ─── EMAIL SENDER (via Apps Script) ────────────────────
 
 def send_email(to: str, subject: str, body: str):
-    apps_script_url = os.environ.get("APPS_SCRIPT_URL")
+    apps_script_url = os.environ.get("https://script.google.com/macros/s/AKfycbxyPB4XQx5mX63qQMBJHjbDlk3vBChoSW06Bkp0bDT9kFHCxAQPouD2RXULWizqLXi2xw/exec")
     try:
         requests.post(
             apps_script_url,
@@ -172,7 +172,7 @@ def send_email(to: str, subject: str, body: str):
 # ─── AI EMAIL GENERATOR ────────────────────────────────
 
 def generate_email(lead: dict):
-    client = Groq(api_key=os.environ.get("GROQ_API_KEY"))
+    client = Groq(api_key=os.environ.get("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"))
     store_name = lead.get("name", "there")
     keyword    = lead.get("keyword", "your niche")
     country    = lead.get("country", "your country")
