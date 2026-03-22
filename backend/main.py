@@ -211,9 +211,16 @@ Return ONLY this JSON, nothing else:
 
 # ─── MAIN AGENT ────────────────────────────────────────
 
+from fastapi.responses import RedirectResponse
+
 @app.get("/")
 def root():
-    return {"status": "Agent is running"}
+    return RedirectResponse(url="https://raihan6962-coder.github.io/shopify-lead-agent")
+```
+
+**"Commit changes"** → Render auto redeploy করবে → ২ মিনিট পর:
+```
+https://shopify-lead-agent.onrender.com
 
 @app.post("/start-agent")
 async def start_agent(keyword: str, country: str):
