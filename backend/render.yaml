@@ -1,0 +1,50 @@
+services:
+  - type: web
+    name: shopify-lead-agent
+    env: python
+    rootDir: backend
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: GROQ_API_KEY
+        sync: false
+      - key: APPS_SCRIPT_URL
+        sync: false
+      - key: GOOGLE_CREDENTIALS_JSON
+        sync: false
+      - key: GOOGLE_SHEET_ID
+        sync: false
+```
+
+**9.4** → **"Commit changes"** → **"Commit changes"**
+
+---
+
+### Part B — Render Account এ যাও
+
+**9.5** → [render.com](https://render.com) এ যাও → Login করো
+
+**9.6** → Dashboard এ **"New +"** button → **"Web Service"** click করো
+
+**9.7** → **"Connect a repository"** → GitHub connect করো যদি আগে না করা থাকে
+
+**9.8** → তোমার `shopify-lead-agent` repository টা দেখাবে → **"Connect"** click করো
+
+---
+
+### Part C — Service Configure করো
+
+**9.9** → এভাবে fill করো:
+
+- **Name:** `shopify-lead-agent`
+- **Region:** Singapore (Bangladesh এর কাছে)
+- **Branch:** `main`
+- **Root Directory:** `backend`
+- **Runtime:** `Python 3`
+- **Build Command:**
+```
+pip install -r requirements.txt
+```
+- **Start Command:**
+```
+uvicorn main:app --host 0.0.0.0 --port $PORT
