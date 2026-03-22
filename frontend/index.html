@@ -1,263 +1,64 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
+<meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Shopify Lead Agent</title>
 <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;700;800&display=swap" rel="stylesheet"/>
 <style>
-  :root {
-    --bg: #0a0a0a;
-    --surface: #111111;
-    --border: #222222;
-    --accent: #00ff88;
-    --accent2: #0066ff;
-    --text: #f0f0f0;
-    --muted: #666;
-    --warn: #ff6b35;
-    --sent: #00ff88;
-  }
-
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-
-  body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: 'Syne', sans-serif;
-    min-height: 100vh;
-    padding: 40px 20px;
-  }
-
-  .container { max-width: 780px; margin: 0 auto; }
-
-  .header {
-    border-left: 3px solid var(--accent);
-    padding-left: 16px;
-    margin-bottom: 40px;
-  }
-
-  .header h1 {
-    font-size: 28px;
-    font-weight: 800;
-    letter-spacing: -1px;
-  }
-
-  .header p {
-    font-family: 'Space Mono', monospace;
-    font-size: 11px;
-    color: var(--muted);
-    margin-top: 4px;
-    letter-spacing: 1px;
-  }
-
-  .control-panel {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 28px;
-    margin-bottom: 24px;
-  }
-
-  .fields {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 16px;
-    margin-bottom: 20px;
-  }
-
-  @media (max-width: 520px) {
-    .fields { grid-template-columns: 1fr; }
-  }
-
-  label {
-    font-family: 'Space Mono', monospace;
-    font-size: 10px;
-    color: var(--muted);
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    display: block;
-    margin-bottom: 6px;
-  }
-
-  input, select {
-    width: 100%;
-    background: var(--bg);
-    border: 1px solid var(--border);
-    border-radius: 4px;
-    color: var(--text);
-    font-family: 'Syne', sans-serif;
-    font-size: 14px;
-    padding: 10px 14px;
-    outline: none;
-    transition: border-color 0.2s;
-  }
-
-  input:focus, select:focus {
-    border-color: var(--accent);
-  }
-
-  select option { background: #111; }
-
-  .btn-start {
-    width: 100%;
-    padding: 14px;
-    background: var(--accent);
-    color: #000;
-    font-family: 'Space Mono', monospace;
-    font-size: 13px;
-    font-weight: 700;
-    letter-spacing: 2px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: opacity 0.2s, transform 0.1s;
-  }
-
-  .btn-start:hover { opacity: 0.85; }
-  .btn-start:active { transform: scale(0.99); }
-  .btn-start:disabled { opacity: 0.3; cursor: not-allowed; }
-
-  /* Stats Row */
-  .stats-row {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 12px;
-    margin-bottom: 24px;
-  }
-
-  .stat-box {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 16px;
-    text-align: center;
-  }
-
-  .stat-num {
-    font-size: 32px;
-    font-weight: 800;
-    line-height: 1;
-    margin-bottom: 4px;
-  }
-
-  .stat-label {
-    font-family: 'Space Mono', monospace;
-    font-size: 9px;
-    color: var(--muted);
-    letter-spacing: 2px;
-    text-transform: uppercase;
-  }
-
-  .stat-box.found .stat-num  { color: var(--accent2); }
-  .stat-box.saved .stat-num  { color: var(--accent); }
-  .stat-box.emailed .stat-num { color: var(--warn); }
-
-  /* Live Feed */
-  .feed-panel {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    overflow: hidden;
-  }
-
-  .feed-header {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 14px 20px;
-    border-bottom: 1px solid var(--border);
-    font-family: 'Space Mono', monospace;
-    font-size: 11px;
-    letter-spacing: 2px;
-    color: var(--muted);
-    text-transform: uppercase;
-  }
-
-  .dot {
-    width: 7px; height: 7px;
-    border-radius: 50%;
-    background: var(--border);
-    transition: background 0.3s;
-  }
-
-  .dot.active {
-    background: var(--accent);
-    box-shadow: 0 0 8px var(--accent);
-    animation: pulse 1.2s infinite;
-  }
-
-  @keyframes pulse {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.3; }
-  }
-
-  .feed-body {
-    height: 400px;
-    overflow-y: auto;
-    padding: 16px 20px;
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-    scroll-behavior: smooth;
-  }
-
-  .feed-body::-webkit-scrollbar { width: 4px; }
-  .feed-body::-webkit-scrollbar-track { background: transparent; }
-  .feed-body::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
-
-  .feed-item {
-    font-family: 'Space Mono', monospace;
-    font-size: 12px;
-    line-height: 1.6;
-    padding: 8px 12px;
-    border-radius: 4px;
-    border-left: 2px solid transparent;
-    background: rgba(255,255,255,0.02);
-    animation: fadeIn 0.3s ease;
-  }
-
-  @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(4px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
-
-  .feed-item.find   { border-color: var(--accent2); color: #7eb8ff; }
-  .feed-item.save   { border-color: var(--accent);  color: #aaffcc; }
-  .feed-item.email  { border-color: var(--warn);    color: #ffb899; }
-  .feed-item.done   { border-color: var(--accent);  color: var(--accent); }
-  .feed-item.error  { border-color: #ff4444;        color: #ff9999; }
-  .feed-item.info   { border-color: var(--border);  color: var(--muted); }
-
-  .empty-state {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    color: var(--muted);
-    font-family: 'Space Mono', monospace;
-    font-size: 11px;
-    letter-spacing: 1px;
-    gap: 10px;
-  }
-
-  .empty-state .icon { font-size: 32px; opacity: 0.3; }
+:root{--bg:#0a0a0a;--surface:#111;--border:#222;--accent:#00ff88;--accent2:#0066ff;--text:#f0f0f0;--muted:#666;--warn:#ff6b35}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:'Syne',sans-serif;min-height:100vh;padding:40px 20px}
+.container{max-width:780px;margin:0 auto}
+.header{border-left:3px solid var(--accent);padding-left:16px;margin-bottom:40px}
+.header h1{font-size:28px;font-weight:800;letter-spacing:-1px}
+.header p{font-family:'Space Mono',monospace;font-size:11px;color:var(--muted);margin-top:4px;letter-spacing:1px}
+.panel{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:28px;margin-bottom:24px}
+.fields{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px}
+@media(max-width:520px){.fields{grid-template-columns:1fr}}
+label{font-family:'Space Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;display:block;margin-bottom:6px}
+input,select{width:100%;background:var(--bg);border:1px solid var(--border);border-radius:4px;color:var(--text);font-family:'Syne',sans-serif;font-size:14px;padding:10px 14px;outline:none;transition:border-color .2s}
+input:focus,select:focus{border-color:var(--accent)}
+select option{background:#111}
+.btn{width:100%;padding:14px;background:var(--accent);color:#000;font-family:'Space Mono',monospace;font-size:13px;font-weight:700;letter-spacing:2px;border:none;border-radius:4px;cursor:pointer;transition:opacity .2s}
+.btn:hover{opacity:.85}
+.btn:disabled{opacity:.3;cursor:not-allowed}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:24px}
+.stat{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:16px;text-align:center}
+.stat-num{font-size:32px;font-weight:800;line-height:1;margin-bottom:4px}
+.stat-lbl{font-family:'Space Mono',monospace;font-size:9px;color:var(--muted);letter-spacing:2px;text-transform:uppercase}
+.s1 .stat-num{color:var(--accent2)}.s2 .stat-num{color:var(--accent)}.s3 .stat-num{color:var(--warn)}
+.feed-panel{background:var(--surface);border:1px solid var(--border);border-radius:8px;overflow:hidden}
+.feed-head{display:flex;align-items:center;gap:10px;padding:14px 20px;border-bottom:1px solid var(--border);font-family:'Space Mono',monospace;font-size:11px;letter-spacing:2px;color:var(--muted);text-transform:uppercase}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--border);transition:background .3s}
+.dot.active{background:var(--accent);box-shadow:0 0 8px var(--accent);animation:pulse 1.2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+.feed-body{height:400px;overflow-y:auto;padding:16px 20px;display:flex;flex-direction:column;gap:6px;scroll-behavior:smooth}
+.feed-body::-webkit-scrollbar{width:4px}
+.feed-body::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
+.item{font-family:'Space Mono',monospace;font-size:12px;line-height:1.6;padding:8px 12px;border-radius:4px;border-left:2px solid transparent;background:rgba(255,255,255,.02);animation:fadeIn .3s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+.item.find{border-color:var(--accent2);color:#7eb8ff}
+.item.save{border-color:var(--accent);color:#aaffcc}
+.item.email{border-color:var(--warn);color:#ffb899}
+.item.done{border-color:var(--accent);color:var(--accent)}
+.item.error{border-color:#ff4444;color:#ff9999}
+.item.info{border-color:var(--border);color:var(--muted)}
+.empty{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;color:var(--muted);font-family:'Space Mono',monospace;font-size:11px;gap:10px}
+.empty .ico{font-size:32px;opacity:.3}
 </style>
 </head>
 <body>
 <div class="container">
-
   <div class="header">
     <h1>Shopify Lead Agent</h1>
     <p>FIND · COLLECT · EMAIL · AUTOMATE</p>
   </div>
-
-  <!-- Control Panel -->
-  <div class="control-panel">
+  <div class="panel">
     <div class="fields">
       <div>
         <label>Niche / Keyword</label>
-        <input type="text" id="keyword" placeholder="e.g. electronics, fashion..." />
+        <input type="text" id="keyword" placeholder="e.g. electronics, fashion..."/>
       </div>
       <div>
         <label>Target Country</label>
@@ -281,149 +82,86 @@
         </select>
       </div>
     </div>
-    <button class="btn-start" id="startBtn" onclick="startAgent()">▶ START AGENT</button>
+    <button class="btn" id="btn" onclick="startAgent()">▶ START AGENT</button>
   </div>
-
-  <!-- Stats -->
-  <div class="stats-row">
-    <div class="stat-box found">
-      <div class="stat-num" id="countFound">0</div>
-      <div class="stat-label">Stores Found</div>
-    </div>
-    <div class="stat-box saved">
-      <div class="stat-num" id="countSaved">0</div>
-      <div class="stat-label">Leads Saved</div>
-    </div>
-    <div class="stat-box emailed">
-      <div class="stat-num" id="countEmailed">0</div>
-      <div class="stat-label">Emails Sent</div>
-    </div>
+  <div class="stats">
+    <div class="stat s1"><div class="stat-num" id="c1">0</div><div class="stat-lbl">Stores Found</div></div>
+    <div class="stat s2"><div class="stat-num" id="c2">0</div><div class="stat-lbl">Leads Saved</div></div>
+    <div class="stat s3"><div class="stat-num" id="c3">0</div><div class="stat-lbl">Emails Sent</div></div>
   </div>
-
-  <!-- Live Feed -->
   <div class="feed-panel">
-    <div class="feed-header">
-      <div class="dot" id="liveDot"></div>
-      LIVE FEED
-    </div>
-    <div class="feed-body" id="feedBody">
-      <div class="empty-state">
-        <div class="icon">🤖</div>
-        <span>Agent idle — enter keyword and country to begin</span>
-      </div>
+    <div class="feed-head"><div class="dot" id="dot"></div>LIVE FEED</div>
+    <div class="feed-body" id="feed">
+      <div class="empty"><div class="ico">🤖</div><span>Agent idle — enter keyword and country to begin</span></div>
     </div>
   </div>
-
 </div>
-
 <script>
-  // ⚠️ এখানে তোমার Render backend URL বসাও
-  const BACKEND_URL = "https://shopify-lead-agent.onrender.com/";
+const BACKEND_URL = "https://shopify-lead-agent.onrender.com";
+let c1=0,c2=0,c3=0,es=null;
 
-  let found = 0, saved = 0, emailed = 0;
-  let eventSource = null;
+function startAgent(){
+  const kw=document.getElementById("keyword").value.trim();
+  const co=document.getElementById("country").value;
+  if(!kw||!co){alert("Please enter keyword and select country!");return;}
+  c1=0;c2=0;c3=0;
+  document.getElementById("c1").textContent=0;
+  document.getElementById("c2").textContent=0;
+  document.getElementById("c3").textContent=0;
+  document.getElementById("feed").innerHTML="";
+  document.getElementById("btn").disabled=true;
+  document.getElementById("btn").innerText="⏳ RUNNING...";
+  document.getElementById("dot").classList.add("active");
+  if(es)es.close();
+  fetch(`${BACKEND_URL}/start-agent?keyword=${encodeURIComponent(kw)}&country=${encodeURIComponent(co)}`,{method:"POST"})
+  .then(r=>r.json())
+  .then(d=>{
+    addFeed("🚀 Agent started!","info");
+    listen(d.job_id);
+  })
+  .catch(e=>{addFeed("❌ Failed: "+e.message,"error");reset();});
+}
 
-  function startAgent() {
-    const keyword = document.getElementById("keyword").value.trim();
-    const country = document.getElementById("country").value;
+function listen(id){
+  es=new EventSource(`${BACKEND_URL}/stream/${id}`);
+  es.onmessage=function(e){
+    const msg=JSON.parse(e.data).message;
+    if(msg==="__DONE__"){addFeed("✅ Agent finished!","done");es.close();reset();return;}
+    let t="info";
+    if(msg.includes("Found")||msg.includes("Checking")){t="find";c1++;document.getElementById("c1").textContent=c1;}
+    if(msg.includes("Saving")||msg.includes("saved")){t="save";c2++;document.getElementById("c2").textContent=c2;}
+    if(msg.includes("Email sent")||msg.includes("📨")){t="email";c3++;document.getElementById("c3").textContent=c3;}
+    if(msg.includes("❌")||msg.includes("error")){t="error";}
+    if(msg.includes("🎉")||msg.includes("Done")){t="done";}
+    addFeed(msg,t);
+  };
+  es.onerror=function(){addFeed("⚠️ Connection lost.","error");reset();};
+}
 
-    if (!keyword || !country) {
-      alert("Please enter keyword and select country!");
-      return;
-    }
+function addFeed(msg,t){
+  const f=document.getElementById("feed");
+  const e=f.querySelector(".empty");
+  if(e)e.remove();
+  const d=document.createElement("div");
+  d.className="item "+t;
+  const now=new Date();
+  d.textContent="["+now.toTimeString().slice(0,8)+"] "+msg;
+  f.appendChild(d);
+  f.scrollTop=f.scrollHeight;
+}
 
-    // Reset
-    found = 0; saved = 0; emailed = 0;
-    updateStats();
-    clearFeed();
-
-    document.getElementById("startBtn").disabled = true;
-    document.getElementById("startBtn").innerText = "⏳ AGENT RUNNING...";
-    document.getElementById("liveDot").classList.add("active");
-
-    if (eventSource) eventSource.close();
-
-    // Start agent
-    fetch(`${BACKEND_URL}/start-agent?keyword=${encodeURIComponent(keyword)}&country=${encodeURIComponent(country)}`, {
-      method: "POST"
-    })
-    .then(r => r.json())
-    .then(data => {
-      const jobId = data.job_id;
-      addFeed(`🚀 Agent started — Job ID: ${jobId}`, "info");
-      listenStream(jobId);
-    })
-    .catch(err => {
-      addFeed(`❌ Failed to start: ${err.message}`, "error");
-      resetBtn();
-    });
-  }
-
-  function listenStream(jobId) {
-    eventSource = new EventSource(`${BACKEND_URL}/stream/${jobId}`);
-
-    eventSource.onmessage = function(e) {
-      const data = JSON.parse(e.data);
-      const msg = data.message;
-
-      if (msg === "__DONE__") {
-        addFeed("✅ Agent finished!", "done");
-        eventSource.close();
-        resetBtn();
-        return;
-      }
-
-      // Detect type
-      let type = "info";
-      if (msg.includes("Found") || msg.includes("Checking"))  { type = "find";  found++;  updateStats(); }
-      if (msg.includes("saved") || msg.includes("Saved"))     { type = "save";  saved++;  updateStats(); }
-      if (msg.includes("Email sent") || msg.includes("📨"))   { type = "email"; emailed++; updateStats(); }
-      if (msg.includes("❌") || msg.includes("error"))        { type = "error"; }
-      if (msg.includes("🎉") || msg.includes("Done"))         { type = "done"; }
-
-      addFeed(msg, type);
-    };
-
-    eventSource.onerror = function() {
-      addFeed("⚠️ Connection lost. Agent may still be running.", "error");
-      resetBtn();
-    };
-  }
-
-  function addFeed(msg, type = "info") {
-    const body = document.getElementById("feedBody");
-
-    // Remove empty state
-    const empty = body.querySelector(".empty-state");
-    if (empty) empty.remove();
-
-    const item = document.createElement("div");
-    item.className = `feed-item ${type}`;
-    item.textContent = `[${timestamp()}] ${msg}`;
-    body.appendChild(item);
-    body.scrollTop = body.scrollHeight;
-  }
-
-  function clearFeed() {
-    document.getElementById("feedBody").innerHTML = "";
-  }
-
-  function updateStats() {
-    document.getElementById("countFound").textContent  = found;
-    document.getElementById("countSaved").textContent  = saved;
-    document.getElementById("countEmailed").textContent = emailed;
-  }
-
-  function resetBtn() {
-    document.getElementById("startBtn").disabled = false;
-    document.getElementById("startBtn").innerText = "▶ START AGENT";
-    document.getElementById("liveDot").classList.remove("active");
-  }
-
-  function timestamp() {
-    const now = new Date();
-    return now.toTimeString().slice(0, 8);
-  }
+function reset(){
+  document.getElementById("btn").disabled=false;
+  document.getElementById("btn").innerText="▶ START AGENT";
+  document.getElementById("dot").classList.remove("active");
+}
 </script>
 </body>
 </html>
+```
+
+**3** → **"Commit changes"** → **"Commit changes"**
+
+**4** → ২ মিনিট অপেক্ষা করো → এই URL এ যাও:
+```
+https://raihan6962-coder.github.io/shopify-lead-agent
